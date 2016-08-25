@@ -1,0 +1,62 @@
+import urllib
+import urllib2
+import cookielib
+
+##share delegation
+proxy=urllib2.ProxyHandler({'https': 'https://10.144.1.10:8080'})
+opener=urllib2.build_opener(proxy)
+urllib2.install_opener(opener)
+
+proxy=urllib2.ProxyHandler({'http': 'http://10.144.1.10:8080'})
+opener=urllib2.build_opener(proxy)
+urllib2.install_opener(opener)
+
+##持仓
+##shareDailyKLineUrl = "https://jy.yongjinbao.com.cn/winner_gj/gjzq/stock/exchange.action?CSRF_Token=undefined&timestamp=0.0021871042904353932&service_type=stock&request_id=mystock_403&sort_direction=0"
+##买入
+##shareDailyKLineUrl = "https://jy.yongjinbao.com.cn/winner_gj/gjzq/stock/exchange.action?CSRF_Token=undefined&timestamp=0.32688291559923116&request_id=buystock_302&stock_account=A793984172&exchange_type=1&entrust_prop=0&entrust_bs=1&stock_code=600570&entrust_price=20.90&entrust_amount=100&elig_riskmatch_flag=1"
+##卖出
+##shareDailyKLineUrl = "https://jy.yongjinbao.com.cn/winner_gj/gjzq/stock/exchange.action?CSRF_Token=undefined&timestamp=0.14816564098936558&service_type=stock&request_id=sellstock_302&stock_account=A793984172&exchange_type=1&entrust_prop=0&entrust_bs=2&stock_code=600570&entrust_price=200&entrust_amount=100"
+##股价档
+##shareDailyKLineUrl = "https://jy.yongjinbao.com.cn/winner_gj/gjzq/stock/quote.action?CSRF_Token=undefined&timestamp=0.26974255141218373&service_type=stock&function_id=Q0002&codeList=600570"
+##委托查询
+shareDailyKLineUrl = "https://jy.yongjinbao.com.cn/winner_gj/gjzq/stock/exchange.action?CSRF_Token=undefined&timestamp=0.26393791970167834&service_type=stock&deliver_type=&sort_direction=1&request_id=trust_401"
+##撤单
+##shareDailyKLineUrl = "https://jy.yongjinbao.com.cn/winner_gj/gjzq/stock/exchange.action?CSRF_Token=undefined&timestamp=0.28596094944783856&request_id=chedan_304&entrust_no=273861&stock_code=600570"
+
+yjbUrl="https://jy.yongjinbao.com.cn/winner_gj/gjzq/exchange.action"
+
+loginInfo={"account_content": "40380528","content_type": "0","cpuid": "-306C3-7FFAFBFF","disk_serial_id": "","function_id": "200","identity_type": "","input_content": "1","login_type": "stock","loginPasswordType": "B64","mac_addr": "C4-D9-87-AB-C3-14","machinecode": "-306C3-7FFAFBFF","password": "A+9BQUFnQUJBQUNBQUowZkw2U21JL25BTmFSTGhrcjcyK0FLWThVT1BnNENzWXRIaWFqaGdEVUN5UQ==","remember_me": "","validate_flag": "0","version": "200"}
+
+httpHandler = urllib2.HTTPHandler(debuglevel=1)
+httpsHandler = urllib2.HTTPSHandler(debuglevel=1)
+opener = urllib2.build_opener(httpHandler, httpsHandler)
+opener.addheaders.append(('Cookie','JSESSIONID=48D0BEFBD4F71245FF5134D45811C02E'))
+urllib2.install_opener(opener)
+
+def getJessionID():
+    ##cookie = cookielib.CookieJar()
+    ##opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
+    ##urllib2.install_opener(opener)
+    try:
+        data = urllib.urlencode({"account_content": "40380528","content_type": "0","cpuid": "-306C3-7FFAFBFF","disk_serial_id": "","function_id": "200","identity_type": "","input_content": "1","login_type": "stock","loginPasswordType": "B64","mac_addr": "C4-D9-87-AB-C3-14","machinecode": "-306C3-7FFAFBFF","password": "A+9BQUFnQUJBQUNBQUowZkw2U21JL25BTmFSTGhrcjcyK0FLWThVT1BnNENzWXRIaWFqaGdEVUN5UQ==","remember_me": "","validate_flag": "0","version": "200"})  
+        res = urllib2.urlopen(yjbUrl, data)
+    except:
+        pass;
+    resstr = res.read()
+
+    print resstr
+
+    print "======================"
+    print res.headers.getheader("Set-Cookie")
+
+def getDelegationInfo():
+    try:
+        res = urllib2.urlopen(shareDailyKLineUrl)
+    except:
+        pass;
+    resstr = res.read()
+
+    print resstr;
+
+getJessionID()
